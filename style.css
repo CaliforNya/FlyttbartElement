@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'Atop';
+    src: url(Atop-R99O3.ttf);
+}
+
+:root {
+
+    --violet: #9B5DE5;
+    --pink: #F15BB5;
+    --yellow: #FFEF9F;
+    --blue: #00BBF9;
+    --turquise: #00F5D4;
+    --green: #C1FBA4;
+    --orange: #FB9D50;
+    --red: #ef476f;
+    --font-bobbly: 'Atop', sans-serif;
+}
+
+body {
+    box-sizing: border-box;
+    background-color: var(--yellow);
+
+}
+
+h1 {
+    font-family: var(--font-bobbly);
+    font-size: 7rem;
+    font-weight: 300;
+    text-align: center;
+    color: var(--violet);
+}
+
+.main-container {
+    border: #00BBF9 solid 20px;
+    border-radius: 20%;
+    height: 70svh;
+    width: 70svh;
+    margin: 10px auto;
+    background-color: var(--green);
+}
+
+.ball {
+    width: 10svh;
+    height: 10svh;
+
+    cursor: pointer;
+    display: flex;
+    border-radius: 50%;
+}
+
+.ball-container {
+    height: calc(70vh - 20px);
+    width: calc(70vh - 20px);
+    border-radius: 20%;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+#ball1 {
+    background-color: var(--orange);
+}
+
+#ball2 {
+    background-color: var(--pink);
+}
+
+#ball3 {
+    background-color: var(--turquise);
+}
+
+#ball4 {
+    background-color: var(--red);
+}
