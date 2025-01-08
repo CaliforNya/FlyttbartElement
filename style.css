@@ -4,14 +4,15 @@
 }
 
 :root {
-
     --violet: #9B5DE5;
+    --light-pink: #FFD6E0;
     --pink: #F15BB5;
     --yellow: #FFEF9F;
     --blue: #00BBF9;
     --turquise: #00F5D4;
     --green: #C1FBA4;
-    --orange: #FB9D50;
+    --dark-green: #1CE76A;
+    --orange: #fe9920;
     --red: #ef476f;
     --font-bobbly: 'Atop', sans-serif;
 }
@@ -19,59 +20,69 @@
 body {
     box-sizing: border-box;
     background-color: var(--yellow);
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
     font-family: var(--font-bobbly);
     font-size: 7rem;
-    font-weight: 300;
+    font-weight: 100;
     text-align: center;
     color: var(--violet);
+    margin: 10px;
+}
+
+h2 {
+    font-family: var(--font-bobbly);
+    font-size: 3rem;
+    font-weight: 100;
+    text-align: center;
+    color: var(--red);
+    margin: 10px;
+}
+
+
+.ballicon {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    cursor: pointer;
 }
 
 .main-container {
     border: #00BBF9 solid 20px;
-    border-radius: 20%;
-    height: 70svh;
-    width: 70svh;
-    margin: 10px auto;
-    background-color: var(--green);
-}
-
-.ball {
-    width: 10svh;
-    height: 10svh;
-
-    cursor: pointer;
+    border-radius: 5%;
+    height: 60vh;
+    width: 60vh;
     display: flex;
-    border-radius: 50%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--green);
+
 }
 
 .ball-container {
-    height: calc(70vh - 20px);
-    width: calc(70vh - 20px);
+    height: 100%;
+    width: 100%;
     border-radius: 20%;
-    margin: 10px auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
+    position: relative;
 }
 
-#ball1 {
-    background-color: var(--orange);
-}
-
-#ball2 {
+.ball {
+    width: 8vh;
+    height: 8vh;
+    border-radius: 50%;
+    position: absolute;
     background-color: var(--pink);
 }
 
-#ball3 {
-    background-color: var(--turquise);
-}
 
-#ball4 {
-    background-color: var(--red);
+#ball1 {
+    top: 0;
+    left: 0;
+
 }
