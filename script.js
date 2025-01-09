@@ -1,4 +1,5 @@
 const ballContainer = document.getElementById("ball-container");
+const balls = document.querySelectorAll(".ball");
 
 // console.log(balls);
 
@@ -40,29 +41,52 @@ ballIcon.addEventListener("click", () => {
   newBall.addEventListener("click", () => selectBall(newBall));
   newBall.addEventListener("dblclick", () => unselectBall(newBall));
 
-  document.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", (e) => {
     if (newBall.classList.contains("selected")) {
       const ballRect = newBall.getBoundingClientRect();
       const containerRect = ballContainer.getBoundingClientRect();
       let positionTop = ballRect.top - containerRect.top;
       let positionLeft = ballRect.left - containerRect.left;
 
-      if (event.key === "ArrowUp" && positionTop > 0) positionTop -= move;
+      if (e.key === "ArrowUp" && positionTop > 0) positionTop -= move;
       if (
-        event.key === "ArrowDown" &&
+        e.key === "ArrowDown" &&
         positionTop < ballContainer.offsetHeight - newBall.offsetHeight
       )
         positionTop += move;
-      if (event.key === "ArrowLeft" && positionLeft > 0) positionLeft -= move;
+      if (e.key === "ArrowLeft" && positionLeft > 0) positionLeft -= move;
       if (
-        event.key === "ArrowRight" &&
+        e.key === "ArrowRight" &&
         positionLeft < ballContainer.offsetWidth - newBall.offsetWidth
       )
         positionLeft += move;
 
-      newBall.style.position = "absolute";
-      newBall.style.top = positionTop + "px";
-      newBall.style.left = positionLeft + "px";
+      let canMove = true;
+      const balls = document.querySelectorAll(".ball");
+
+      balls.forEach((otherBall) => {
+        if (isColliding(newBall, otherBall)) {
+          canMove = false;
+        }
+      });
+
+      if (canMove) {
+        newBall.style.position = "absolute";
+        newBall.style.top = positionTop + "px";
+        newBall.style.left = positionLeft + "px";
+      }
     }
   });
 });
+
+const isColliding = (ballA, ballB) => {
+  const rectA = ballA.getBoundingClientRect();
+  const rectB = ballB.getBoundingClientRect();
+
+  return !(
+    rectA.right < rectB.left ||
+    rectA.left > rectB.right ||
+    rectA.bottom < rectB.top ||
+    rectA.top > rectB.bottom
+  );
+};
