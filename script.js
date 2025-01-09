@@ -62,10 +62,11 @@ ballIcon.addEventListener("click", () => {
         positionLeft += move;
 
       let canMove = true;
+
       const balls = document.querySelectorAll(".ball");
 
       balls.forEach((otherBall) => {
-        if (isColliding(newBall, otherBall)) {
+        if (otherBall !== newBall && isColliding(newBall, otherBall)) {
           canMove = false;
         }
       });
@@ -78,15 +79,21 @@ ballIcon.addEventListener("click", () => {
     }
   });
 });
-
 const isColliding = (ballA, ballB) => {
   const rectA = ballA.getBoundingClientRect();
   const rectB = ballB.getBoundingClientRect();
 
-  return !(
-    rectA.right < rectB.left ||
-    rectA.left > rectB.right ||
-    rectA.bottom < rectB.top ||
-    rectA.top > rectB.bottom
+  const centerAX = rectA.left + rectA.width / 2;
+  const centerAY = rectA.top + rectA.height / 2;
+  const centerBX = rectB.left + rectB.width / 2;
+  const centerBY = rectB.top + rectB.height / 2;
+
+  const distance = Math.sqrt(
+    Math.pow(centerAX - centerBX, 2) + Math.pow(centerAY - centerBY, 2)
   );
+
+  const radiusA = rectA.width / 2;
+  const radiusB = rectB.width / 2;
+
+  return distance < radiusA + radiusB;
 };
