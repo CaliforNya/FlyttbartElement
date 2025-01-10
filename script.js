@@ -12,6 +12,21 @@ const move = 10;
 let positionTop = 0;
 let positionLeft = 0;
 
+let lastTop = 0;
+let lastLeft = 0;
+
+const colors = [
+  "#9B5DE5",
+  "#FFD6E0",
+  "#F15BB5",
+  "#FFEF9F",
+  "#00BBF9",
+  "#00F5D4",
+  "#1CE76A",
+  "#fe9920",
+  "#ef476f",
+];
+
 const selectBall = (ball) => {
   const balls = document.querySelectorAll(".ball");
   balls.forEach((selectedBall) => {
@@ -36,8 +51,11 @@ const unselectBall = (ball) => {
 
 ballIcon.addEventListener("click", () => {
   const newBall = document.createElement("div");
+  newBall.style.backgroundColor =
+    colors[Math.floor(Math.random() * colors.length)];
   newBall.classList.add("ball");
   ballContainer.appendChild(newBall);
+
   newBall.addEventListener("click", () => selectBall(newBall));
   newBall.addEventListener("dblclick", () => unselectBall(newBall));
 
@@ -45,8 +63,12 @@ ballIcon.addEventListener("click", () => {
     if (newBall.classList.contains("selected")) {
       const ballRect = newBall.getBoundingClientRect();
       const containerRect = ballContainer.getBoundingClientRect();
+
       let positionTop = ballRect.top - containerRect.top;
       let positionLeft = ballRect.left - containerRect.left;
+
+      let lastTop = positionTop;
+      let lastLeft = positionLeft;
 
       if (e.key === "ArrowUp" && positionTop > 0) positionTop -= move;
       if (
@@ -78,22 +100,23 @@ ballIcon.addEventListener("click", () => {
       }
     }
   });
+
+  const isColliding = (ballA, ballB) => {
+    const rectA = ballA.getBoundingClientRect();
+    const rectB = ballB.getBoundingClientRect();
+
+    const centerAX = rectA.left + rectA.width / 2;
+    const centerAY = rectA.top + rectA.height / 2;
+    const centerBX = rectB.left + rectB.width / 2;
+    const centerBY = rectB.top + rectB.height / 2;
+
+    const distance = Math.sqrt(
+      Math.pow(centerAX - centerBX, 2) + Math.pow(centerAY - centerBY, 2)
+    );
+
+    const radiusA = rectA.width / 2;
+    const radiusB = rectB.width / 2;
+
+    return distance < radiusA + radiusB;
+  };
 });
-const isColliding = (ballA, ballB) => {
-  const rectA = ballA.getBoundingClientRect();
-  const rectB = ballB.getBoundingClientRect();
-
-  const centerAX = rectA.left + rectA.width / 2;
-  const centerAY = rectA.top + rectA.height / 2;
-  const centerBX = rectB.left + rectB.width / 2;
-  const centerBY = rectB.top + rectB.height / 2;
-
-  const distance = Math.sqrt(
-    Math.pow(centerAX - centerBX, 2) + Math.pow(centerAY - centerBY, 2)
-  );
-
-  const radiusA = rectA.width / 2;
-  const radiusB = rectB.width / 2;
-
-  return distance < radiusA + radiusB;
-};
