@@ -4,7 +4,7 @@ const move = 5;
 
 const colors = [
   "#9B5DE5",
-  "#FFD6E0",
+  "#Fba0e3",
   "#F15BB5",
   "#fee440",
   "#00BBF9",
@@ -13,6 +13,8 @@ const colors = [
   "#fe9920",
   "#ef476f",
   "#Fa8072",
+  "#4C50A9",
+  "#ccbdbd ",
 ];
 
 // Select ball
