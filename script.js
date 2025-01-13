@@ -165,43 +165,43 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// // Listener for dblclick move to position with shake on collision
+// Listener for dblclick move to position with shake on collision
 
-// ballContainer.addEventListener("dblclick", (e) => {
-//   const selectedBall = document.querySelector(".ball.selected");
-//   if (!selectedBall) return;
+ballContainer.addEventListener("dblclick", (e) => {
+  const selectedBall = document.querySelector(".ball.selected");
+  if (!selectedBall) return;
 
-//   const containerRect = ballContainer.getBoundingClientRect();
-//   const mouseX = e.clientX - containerRect.left;
-//   const mouseY = e.clientY - containerRect.top;
+  const containerRect = ballContainer.getBoundingClientRect();
+  const mouseX = e.clientX - containerRect.left;
+  const mouseY = e.clientY - containerRect.top;
 
-//   const initialLeft = selectedBall.style.left;
-//   const initialTop = selectedBall.style.top;
+  const initialLeft = selectedBall.style.left;
+  const initialTop = selectedBall.style.top;
 
-//   selectedBall.style.position = "absolute";
-//   selectedBall.style.left = `${mouseX - selectedBall.offsetWidth / 2}px`;
-//   selectedBall.style.top = `${mouseY - selectedBall.offsetHeight / 2}px`;
+  selectedBall.style.position = "absolute";
+  selectedBall.style.left = `${mouseX - selectedBall.offsetWidth / 2}px`;
+  selectedBall.style.top = `${mouseY - selectedBall.offsetHeight / 2}px`;
 
-//   const balls = document.querySelectorAll(".ball");
-//   let collisionDetected = false;
+  const balls = document.querySelectorAll(".ball");
+  let collisionDetected = false;
 
-//   balls.forEach((otherBall) => {
-//     if (otherBall !== selectedBall && isColliding(selectedBall, otherBall)) {
-//       collisionDetected = true;
-//     }
-//   });
+  balls.forEach((otherBall) => {
+    if (otherBall !== selectedBall && isColliding(selectedBall, otherBall)) {
+      collisionDetected = true;
+    }
+  });
 
-//   if (collisionDetected) {
-//     selectedBall.style.left = initialLeft;
-//     selectedBall.style.top = initialTop;
+  if (collisionDetected) {
+    selectedBall.style.left = initialLeft;
+    selectedBall.style.top = initialTop;
 
-//     selectedBall.classList.add("shake");
+    selectedBall.classList.add("shake");
 
-//     setTimeout(() => {
-//       selectedBall.classList.remove("shake");
-//     }, 500);
-//   }
-// });
+    setTimeout(() => {
+      selectedBall.classList.remove("shake");
+    }, 500);
+  }
+});
 
 const modal = document.getElementById("userGuideModal");
 const openModalBtn = document.getElementById("openModalBtn");
