@@ -1,122 +1,215 @@
 const ballContainer = document.getElementById("ball-container");
-const balls = document.querySelectorAll(".ball");
-
-// console.log(balls);
-
 const ballIcon = document.getElementById("ballicon");
-
-const containerRect = ballContainer.getBoundingClientRect();
-
-const move = 10;
-
-let positionTop = 0;
-let positionLeft = 0;
-
-let lastTop = 0;
-let lastLeft = 0;
+const move = 5;
 
 const colors = [
   "#9B5DE5",
   "#FFD6E0",
   "#F15BB5",
-  "#FFEF9F",
+  "#fee440",
   "#00BBF9",
   "#00F5D4",
   "#1CE76A",
   "#fe9920",
   "#ef476f",
+  "#Fa8072",
 ];
 
+// Select ball
 const selectBall = (ball) => {
+  if (ball.classList.contains("selected")) {
+    unselectBall(ball);
+    return;
+  }
+
   const balls = document.querySelectorAll(".ball");
   balls.forEach((selectedBall) => {
-    selectedBall.style.border = "none";
-    selectedBall.style.boxShadow = "none";
+    selectedBall.style.backgroundColor = selectedBall.dataset.originalColor;
     selectedBall.classList.remove("selected");
   });
 
-  ball.style.border = "#00BBF9 solid 4px";
-  ball.style.boxShadow = "0 0 20px 2px #00BBF9";
+  ball.dataset.originalColor =
+    ball.dataset.originalColor || ball.style.backgroundColor;
+  ball.style.backgroundColor = "red";
   ball.classList.add("selected");
-  const rect = ball.getBoundingClientRect();
-  positionTop = rect.top - containerRect.top;
-  positionLeft = rect.left - containerRect.left;
 };
 
+// Unselect ball
 const unselectBall = (ball) => {
-  ball.style.border = "none";
-  ball.style.boxShadow = "none";
+  ball.style.backgroundColor = ball.dataset.originalColor;
   ball.classList.remove("selected");
 };
 
-ballIcon.addEventListener("click", () => {
-  const newBall = document.createElement("div");
-  newBall.style.backgroundColor =
-    colors[Math.floor(Math.random() * colors.length)];
-  newBall.classList.add("ball");
-  ballContainer.appendChild(newBall);
+// Ball collision
+const isColliding = (ballA, ballB) => {
+  const rectA = ballA.getBoundingClientRect();
+  const rectB = ballB.getBoundingClientRect();
 
-  newBall.addEventListener("click", () => selectBall(newBall));
-  newBall.addEventListener("dblclick", () => unselectBall(newBall));
+  const centerAX = rectA.left + rectA.width / 2;
+  const centerAY = rectA.top + rectA.height / 2;
+  const centerBX = rectB.left + rectB.width / 2;
+  const centerBY = rectB.top + rectB.height / 2;
 
-  document.addEventListener("keydown", (e) => {
-    if (newBall.classList.contains("selected")) {
-      const ballRect = newBall.getBoundingClientRect();
-      const containerRect = ballContainer.getBoundingClientRect();
+  const distance = Math.sqrt(
+    Math.pow(centerAX - centerBX, 2) + Math.pow(centerAY - centerBY, 2)
+  );
 
-      let positionTop = ballRect.top - containerRect.top;
-      let positionLeft = ballRect.left - containerRect.left;
+  const radiusA = rectA.width / 2;
+  const radiusB = rectB.width / 2;
 
-      let lastTop = positionTop;
-      let lastLeft = positionLeft;
+  return distance < radiusA + radiusB;
+};
 
-      if (e.key === "ArrowUp" && positionTop > 0) positionTop -= move;
-      if (
-        e.key === "ArrowDown" &&
-        positionTop < ballContainer.offsetHeight - newBall.offsetHeight
-      )
-        positionTop += move;
-      if (e.key === "ArrowLeft" && positionLeft > 0) positionLeft -= move;
-      if (
-        e.key === "ArrowRight" &&
-        positionLeft < ballContainer.offsetWidth - newBall.offsetWidth
-      )
-        positionLeft += move;
+// Ball bounce away
+const pushAwayFromCollision = (ball, otherBall) => {
+  const ballRect = ball.getBoundingClientRect();
+  const otherBallRect = otherBall.getBoundingClientRect();
+  const ballCenterX = ballRect.left + ballRect.width / 2;
+  const ballCenterY = ballRect.top + ballRect.height / 2;
+  const otherBallCenterX = otherBallRect.left + otherBallRect.width / 2;
+  const otherBallCenterY = otherBallRect.top + otherBallRect.height / 2;
 
-      let canMove = true;
+  const diffX = ballCenterX - otherBallCenterX;
+  const diffY = ballCenterY - otherBallCenterY;
+  const angle = Math.atan2(diffY, diffX);
 
-      const balls = document.querySelectorAll(".ball");
+  const pushDistance = 1;
+  const newTop = parseFloat(ball.style.top) + Math.sin(angle) * pushDistance;
+  const newLeft = parseFloat(ball.style.left) + Math.cos(angle) * pushDistance;
 
-      balls.forEach((otherBall) => {
-        if (otherBall !== newBall && isColliding(newBall, otherBall)) {
-          canMove = false;
-        }
-      });
+  return { top: newTop, left: newLeft };
+};
 
-      if (canMove) {
-        newBall.style.position = "absolute";
-        newBall.style.top = positionTop + "px";
-        newBall.style.left = positionLeft + "px";
-      }
+// Moving balls with arrows
+const moveBall = (ball, direction) => {
+  const ballRect = ball.getBoundingClientRect();
+  const containerRect = ballContainer.getBoundingClientRect();
+
+  let newTop = ballRect.top - containerRect.top;
+  let newLeft = ballRect.left - containerRect.left;
+
+  if (direction === "up" && newTop > 0) newTop -= move;
+  if (
+    direction === "down" &&
+    newTop < ballContainer.offsetHeight - ball.offsetHeight
+  )
+    newTop += move;
+  if (direction === "left" && newLeft > 0) newLeft -= move;
+  if (
+    direction === "right" &&
+    newLeft < ballContainer.offsetWidth - ball.offsetWidth
+  )
+    newLeft += move;
+
+  const balls = document.querySelectorAll(".ball");
+  balls.forEach((otherBall) => {
+    if (otherBall !== ball && isColliding(ball, otherBall)) {
+      const newPosition = pushAwayFromCollision(ball, otherBall);
+      newTop = newPosition.top;
+      newLeft = newPosition.left;
     }
   });
 
-  const isColliding = (ballA, ballB) => {
-    const rectA = ballA.getBoundingClientRect();
-    const rectB = ballB.getBoundingClientRect();
+  ball.style.position = "absolute";
+  ball.style.top = newTop + "px";
+  ball.style.left = newLeft + "px";
+};
 
-    const centerAX = rectA.left + rectA.width / 2;
-    const centerAY = rectA.top + rectA.height / 2;
-    const centerBX = rectB.left + rectB.width / 2;
-    const centerBY = rectB.top + rectB.height / 2;
+// New ball production
+ballIcon.addEventListener("click", () => {
+  const newBall = document.createElement("div");
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const distance = Math.sqrt(
-      Math.pow(centerAX - centerBX, 2) + Math.pow(centerAY - centerBY, 2)
-    );
+  newBall.style.backgroundColor = randomColor;
+  newBall.dataset.originalColor = randomColor;
 
-    const radiusA = rectA.width / 2;
-    const radiusB = rectB.width / 2;
+  newBall.classList.add("ball");
+  ballContainer.appendChild(newBall);
 
-    return distance < radiusA + radiusB;
-  };
+  newBall.style.position = "absolute";
+
+  // Listener for selecting/unselecting balls
+  newBall.addEventListener("click", () => selectBall(newBall));
 });
+
+const newBall = document.createElement("div");
+newBall.style.backgroundColor =
+  colors[Math.floor(Math.random() * colors.length)];
+
+newBall.classList.add("ball");
+ballContainer.appendChild(newBall);
+
+newBall.style.position = "absolute";
+
+// Listeners for select and unselect a
+newBall.addEventListener("click", () => selectBall(newBall));
+
+// Listener for ball remove
+document.addEventListener("keydown", (e) => {
+  const selectedBall = document.querySelector(".ball.selected");
+  if (selectedBall && e.key === "Backspace") {
+    selectedBall.remove();
+  }
+});
+
+// Listener for moveBall
+document.addEventListener("keydown", (e) => {
+  const selectedBall = document.querySelector(".ball.selected");
+  if (selectedBall) {
+    if (e.key === "ArrowUp") moveBall(selectedBall, "up");
+    if (e.key === "ArrowDown") moveBall(selectedBall, "down");
+    if (e.key === "ArrowLeft") moveBall(selectedBall, "left");
+    if (e.key === "ArrowRight") moveBall(selectedBall, "right");
+  }
+});
+
+// // Listener for dblclick move to position with shake on collision
+
+// ballContainer.addEventListener("dblclick", (e) => {
+//   const selectedBall = document.querySelector(".ball.selected");
+//   if (!selectedBall) return;
+
+//   const containerRect = ballContainer.getBoundingClientRect();
+//   const mouseX = e.clientX - containerRect.left;
+//   const mouseY = e.clientY - containerRect.top;
+
+//   const initialLeft = selectedBall.style.left;
+//   const initialTop = selectedBall.style.top;
+
+//   selectedBall.style.position = "absolute";
+//   selectedBall.style.left = `${mouseX - selectedBall.offsetWidth / 2}px`;
+//   selectedBall.style.top = `${mouseY - selectedBall.offsetHeight / 2}px`;
+
+//   const balls = document.querySelectorAll(".ball");
+//   let collisionDetected = false;
+
+//   balls.forEach((otherBall) => {
+//     if (otherBall !== selectedBall && isColliding(selectedBall, otherBall)) {
+//       collisionDetected = true;
+//     }
+//   });
+
+//   if (collisionDetected) {
+//     selectedBall.style.left = initialLeft;
+//     selectedBall.style.top = initialTop;
+
+//     selectedBall.classList.add("shake");
+
+//     setTimeout(() => {
+//       selectedBall.classList.remove("shake");
+//     }, 500);
+//   }
+// });
+
+const modal = document.getElementById("userGuideModal");
+const openModalBtn = document.getElementById("openModalBtn");
+
+openModalBtn.onclick = function () {
+  modal.style.display = "block";
+};
+
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};

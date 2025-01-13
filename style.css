@@ -13,6 +13,7 @@
     --green: #C1FBA4;
     --dark-green: #1CE76A;
     --orange: #fe9920;
+    --salomon: #Fa8072;
     --red: #ef476f;
     --font-bobbly: 'Atop', sans-serif;
 }
@@ -28,7 +29,7 @@ body {
 
 h1 {
     font-family: var(--font-bobbly);
-    font-size: 7rem;
+    font-size: 5rem;
     font-weight: 100;
     text-align: center;
     color: var(--violet);
@@ -46,8 +47,8 @@ h2 {
 
 
 .ballicon {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     margin: 10px;
     cursor: pointer;
 }
@@ -57,11 +58,13 @@ h2 {
     border-radius: 5%;
     height: 60vh;
     width: 60vh;
+
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     background-color: var(--green);
+    overflow: hidden;
 
 }
 
@@ -70,6 +73,7 @@ h2 {
     width: 100%;
     border-radius: 20%;
     position: relative;
+
 }
 
 .ball {
@@ -85,4 +89,107 @@ h2 {
     top: 0;
     left: 0;
 
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+
+}
+
+.modal-content {
+    background-color: var(--light-pink);
+    margin: 15vh auto;
+    padding: 20px;
+    border: 5px double #646262;
+    border-radius: 20px;
+    width: 80vw;
+    color: #424040
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.modal-body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+#openModalBtn {
+    padding: 10px 20px;
+    background-color: var(--light-pink);
+    border: #646262 solid 1px;
+    border-radius: 5px;
+    color: #646262;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+
+#last {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--violet);
+    font-weight: bolder;
+}
+
+.head {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+}
+
+/* .bounce {
+    animation: bounceBack 0.3s ease;
+}
+
+@keyframes bounceBack {
+    0% {
+        transform: translateY(-5px);
+    }
+
+    50% {
+        transform: translateY(3px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+} */
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    75% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
 }

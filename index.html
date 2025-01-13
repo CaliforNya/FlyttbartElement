@@ -10,8 +10,10 @@
   </head>
 
   <body>
-    <h1>Draw Ball Box</h1>
-
+    <div class="head">
+      <button id="openModalBtn">Open User Guide</button>
+      <h1>Draw Ball Box</h1>
+    </div>
     <h2>NEW BALL</h2>
     <div>
       <img
@@ -25,7 +27,66 @@
     <div id="main-container" class="main-container">
       <div id="ball-container" class="ball-container"></div>
     </div>
+    <div id="userGuideModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">User Guide for the Ball Box</div>
+        <div class="modal-body">
+          <p>
+            <strong>Welcome to the Draw Ball Box!</strong> <br />
+            This app is designed to create various shapes and forms by
+            manipulating balls. You can add, move, and interact with the balls
+            to form interesting patterns and designs.
+          </p>
 
+          <h3>1. Adding a New Ball:</h3>
+          <p>
+            Click on the beachball icon to add a new ball to the box. The ball
+            will be randomly colored and will appear in the box.
+          </p>
+
+          <h3>2. Selecting a Ball:</h3>
+          <p>
+            Click on the ball to select it. The selected ball will get bright
+            red color for the time of selection. To unselect the ball, click on
+            it again.
+          </p>
+
+          <h3>3. Moving the Ball:</h3>
+          <p>
+            Once a ball is selected, use the arrow keys (up, down, left, right)
+            on the keyboard to move it in the desired direction. The ball will
+            avoid collisions with other balls and will bounce away if a
+            collision occurs!
+          </p>
+
+          <h3>4. Removing a Ball:</h3>
+          <p>
+            To remove the selected ball, press the
+            <strong>Backspace</strong> key on the keyboard.
+          </p>
+
+          <h3>5. Moving the Ball with the Mouse:</h3>
+          <p>
+            Double-click anywhere inside the container to move the selected ball
+            to that location. The ball will be placed at the point where you
+            clicked.When positions of two balls collide inside the container,
+            the affected ball will trigger a shake effect.
+          </p>
+
+          <h3>6. Interacting with Balls:</h3>
+          <p>
+            You can only have one selected ball at a time. Whenever you click on
+            a ball, any previously selected balls will be unselected.
+          </p>
+
+          <p id="last">
+            This app allows you to create and interact with a variety of shapes
+            and designs formed by balls. Have fun experimenting with different
+            patterns and arrangements!
+          </p>
+        </div>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
